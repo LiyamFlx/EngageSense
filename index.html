@@ -3,199 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Engagement Analysis Tool</title>
-  <style>
-    /* General Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-
-    header {
-      background-color: #4CAF50;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      font-size: 1.8em;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .container {
-      padding: 20px;
-      max-width: 800px;
-      margin: 50px auto;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .upload-box {
-      border: 2px dashed #4CAF50;
-      border-radius: 8px;
-      padding: 30px;
-      text-align: center;
-      background-color: #fafafa;
-      margin-bottom: 20px;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .upload-box:hover {
-      background-color: #f1f1f1;
-      transform: scale(1.02);
-      cursor: pointer;
-    }
-
-    button {
-      background-color: #4CAF50;
-      color: white;
-      font-size: 1em;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    button:disabled {
-      background-color: #ddd;
-      cursor: not-allowed;
-    }
-
-    button:hover:enabled {
-      background-color: #45a049;
-      transform: scale(1.05);
-    }
-
-    .results {
-      margin-top: 20px;
-      padding: 20px;
-      background-color: #f8f9fa;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .results h3 {
-      margin-bottom: 10px;
-      color: #4CAF50;
-    }
-
-    .progress-bar-container {
-      width: 100%;
-      background-color: #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-top: 20px;
-      display: none;
-    }
-
-    .progress-bar {
-      height: 20px;
-      background-color: #4CAF50;
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-  </style>
+  <title>EngageSense</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    Engagement Analysis Tool
+    <h1>EngageSense</h1>
+    <p>Analyze and enhance engagement effortlessly</p>
   </header>
 
-  <div class="container">
-    <div class="upload-box" onclick="document.getElementById('file-input').click()">
-      Drag and drop or click to upload your audio file
-      <input type="file" id="file-input" accept=".mp3, .wav" style="display: none;">
-    </div>
-    <button id="analyze-btn" onclick="analyzeFile()" disabled>Analyze</button>
+  <main>
+    <section class="upload-section">
+      <div class="upload-box" id="upload-box">
+        <p id="upload-text">Drag and drop or click to upload your audio file</p>
+        <input type="file" id="file-input" accept=".mp3, .wav">
+      </div>
+      <button id="analyze-btn" disabled>Analyze</button>
+      <div class="progress-bar-container" id="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </section>
 
-    <div class="progress-bar-container" id="progress-container">
-      <div class="progress-bar" id="progress-bar"></div>
-    </div>
+    <section class="results-section" id="results-section">
+      <h2>Analysis Results</h2>
+      <canvas id="results-chart"></canvas>
+      <p id="results-text"></p>
+    </section>
+  </main>
 
-    <div id="results" class="results" style="display: none;">
-      <h3>Analysis Results</h3>
-      <p id="result-text"></p>
-    </div>
-  </div>
+  <footer>
+    <p>&copy; 2024 EngageSense. All rights reserved.</p>
+  </footer>
 
-  <script>
-    // API URL
-    const API_URL = 'https://engagement-analysis-calculator.onrender.com/analyze';
-
-    // DOM Elements
-    const fileInput = document.getElementById('file-input');
-    const analyzeBtn = document.getElementById('analyze-btn');
-    const progressBarContainer = document.getElementById('progress-container');
-    const progressBar = document.getElementById('progress-bar');
-    const resultsDiv = document.getElementById('results');
-    const resultText = document.getElementById('result-text');
-
-    // Enable Analyze Button on File Selection
-    fileInput.addEventListener('change', () => {
-      if (fileInput.files.length > 0) {
-        analyzeBtn.disabled = false;
-      } else {
-        analyzeBtn.disabled = true;
-      }
-    });
-
-    // Simulate Progress Bar
-    function updateProgressBar(percentage) {
-      progressBar.style.width = percentage + '%';
-      if (percentage === 100) {
-        setTimeout(() => {
-          progressBarContainer.style.display = 'none';
-        }, 500);
-      }
-    }
-
-    // Analyze File
-    async function analyzeFile() {
-      const file = fileInput.files[0];
-      if (!file) {
-        alert('Please upload a file.');
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        // Show Progress Bar
-        progressBarContainer.style.display = 'block';
-        updateProgressBar(25);
-
-        // Send Request
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          body: formData,
-        });
-
-        updateProgressBar(75);
-
-        if (!response.ok) {
-          throw new Error('Analysis failed.');
-        }
-
-        const data = await response.json();
-        updateProgressBar(100);
-
-        // Display Results
-        resultsDiv.style.display = 'block';
-        resultText.textContent = `Engagement Score: ${data.engagement_score || 'N/A'}`;
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Failed to analyze the file. Please try again.');
-      }
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
