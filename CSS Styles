@@ -1,0 +1,109 @@
+/* Variables */
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #333;
+  --background-color: #f9f9f9;
+  --light-color: #fafafa;
+  --success-color: #45a049;
+  --error-color: #e74c3c;
+}
+
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: var(--secondary-color);
+  line-height: 1.6;
+}
+
+/* Header */
+header {
+  background-color: var(--primary-color);
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+header h1 {
+  font-size: 2.5em;
+}
+
+header p {
+  font-size: 1.2em;
+}
+
+/* Upload Section */
+.upload-section {
+  max-width: 800px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.upload-box {
+  border: 2px dashed var(--primary-color);
+  border-radius: 10px;
+  padding: 30px;
+  background-color: var(--light-color);
+  transition: 0.3s ease;
+}
+
+.upload-box:hover {
+  background-color: var(--background-color);
+  cursor: pointer;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+button:hover:enabled {
+  background-color: var(--success-color);
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  margin-top: 20px;
+  background-color: #ddd;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: var(--primary-color);
+  transition: width 0.4s ease;
+}
+
+/* Results Section */
+.results-section {
+  max-width: 800px;
+  margin: 50px auto;
+  display: none;
+  text-align: center;
+}
+
+canvas {
+  max-width: 100%;
+  margin: 20px auto;
+}
