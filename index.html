@@ -9,25 +9,37 @@
 <body>
   <header>
     <h1>EngageSense</h1>
-    <p>Analyze and enhance engagement effortlessly</p>
+    <p>Real-time engagement analysis for live events</p>
   </header>
 
   <main>
-    <section class="upload-section">
-      <div class="upload-box" id="upload-box">
-        <p id="upload-text">Drag and drop or click to upload your audio file</p>
-        <input type="file" id="file-input" accept=".mp3, .wav">
-      </div>
-      <button id="analyze-btn" disabled>Analyze</button>
-      <div class="progress-bar-container" id="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
-      </div>
+    <!-- Home Screen -->
+    <section id="home-screen" role="main" aria-label="Home Screen">
+      <h2>Welcome to EngageSense</h2>
+      <button id="start-session-btn" aria-label="Start Session">Start a Session</button>
     </section>
 
-    <section class="results-section" id="results-section">
+    <!-- Upload Screen -->
+    <section id="upload-screen" style="display: none;" role="region" aria-label="Upload Screen">
+      <h2>Upload Your Audio File</h2>
+      <div class="upload-box" id="upload-box" role="button" aria-label="Upload File">
+        <p id="upload-text">Drag and drop or click to upload your audio file</p>
+        <input type="file" id="file-input" accept=".mp3, .wav" aria-label="Audio File Input">
+      </div>
+      <button id="analyze-btn" disabled aria-label="Analyze File">Analyze</button>
+    </section>
+
+    <!-- Real-Time Monitoring Screen -->
+    <section id="monitoring-screen" style="display: none;" role="region" aria-label="Real-Time Monitoring">
+      <h2>Real-Time Monitoring</h2>
+      <canvas id="real-time-chart" aria-label="Engagement Graph"></canvas>
+    </section>
+
+    <!-- Results Screen -->
+    <section id="results-screen" style="display: none;" role="region" aria-label="Results Screen">
       <h2>Analysis Results</h2>
-      <canvas id="results-chart"></canvas>
-      <p id="results-text"></p>
+      <canvas id="results-chart" aria-label="Results Chart"></canvas>
+      <button id="download-report-btn" aria-label="Download Report">Download Report</button>
     </section>
   </main>
 
