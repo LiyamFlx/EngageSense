@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engagement Analysis</title>
+  <style>
+    /* Styles (Combined from styles.css) */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background-color: #4CAF50;
+      padding: 10px;
+      text-align: center;
+      color: white;
+      font-size: 1.5em;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .upload-box {
+      border: 2px dashed #4CAF50;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      background-color: white;
+      margin-bottom: 20px;
+    }
+
+    .upload-box:hover {
+      background-color: #f9f9f9;
+      cursor: pointer;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .results {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Engagement Analysis Tool
+  </header>
+
+  <div class="container">
+    <div class="upload-box" onclick="document.getElementById('file-input').click()">
+      Drag and drop or click to upload your audio file
+      <input type="file" id="file-input" accept=".mp3, .wav" style="display: none;">
+    </div>
+    <button id="analyze-btn" onclick="analyzeFile()" disabled>Analyze</button>
+
+    <div id="results" class="results" style="display: none;">
+      <h3>Analysis Results</h3>
+      <p id="result-text"></p>
+    </div>
+  </div>
+
+  <script>
+    // Script (Combined from script.js)
+    const API_URL = 'https://engagement-analysis-calculator.onrender.com/analyze';
+    const fileInput = document.getElementById('file-input');
+    const analyzeBtn = document.getElementById('analyze-btn');
+    const resultsDiv = document.getElementById('results');
+    const resultText = document.getElementById('result-text');
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        analyzeBtn.disabled = false;
+      }
+    });
+
+    async function analyzeFile() {
+      const file = fileInput.files[0];
+      if (!file) {
+        alert('Please upload a file.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Analysis failed.');
+        }
+
+        const data = await response.json();
+        resultsDiv.style.display = 'block';
+        resultText.textContent = `Engagement Score: ${data.engagement_score || 'N/A'}`;
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to analyze the file. Please try again.');
+      }
+    }
+  </script>
+</body>
+</html>
