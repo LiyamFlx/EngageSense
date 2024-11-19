@@ -1,69 +1,81 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const startSessionBtn = document.getElementById("start-session-btn");
-  const fileInput = document.getElementById("file-input");
-  const analyzeBtn = document.getElementById("analyze-btn");
-  const uploadScreen = document.getElementById("upload-screen");
-  const homeScreen = document.getElementById("home-screen");
-  const resultsScreen = document.getElementById("results-screen");
-  const API_URL = "https://engagement-analysis-calculator.onrender.com/analyze";
+    const progressBar = document.getElementById("progressBar");
+    const analysisProgress = document.getElementById("analysisProgress");
+    const fileInput = document.getElementById("fileInput");
+    const nextButton = document.getElementById("nextButton");
+    const viewResultsButton = document.getElementById("viewResultsButton");
+    const API_URL = "https://engagesense.onrender.com/analyze";
 
-  startSessionBtn.addEventListener("click", () => {
-    homeScreen.style.display = "none";
-    uploadScreen.style.display = "block";
-  });
+    let progress = 0;
 
-  fileInput.addEventListener("change", () => {
-    analyzeBtn.disabled = !fileInput.files.length;
-  });
-
-  analyzeBtn.addEventListener("click", async () => {
-    const file = fileInput.files[0];
-    if (!file) {
-      alert("Please upload a file before analyzing.");
-      return;
+    function showScreen(screenNumber) {
+        document.querySelectorAll('.container > div').forEach(screen => {
+            screen.style.display = 'none';
+        });
+        document.getElementById(`screen${screenNumber}`).style.display = 'block';
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
+    fileInput.addEventListener("change", (event) => {
+        if (event.target.files.length > 0) {
+            nextButton.style.display = 'block';
+        } else {
+            nextButton.style.display = 'none';
+        }
+    });
 
-    try {
-      analyzeBtn.textContent = "Analyzing...";
-      analyzeBtn.disabled = true;
+    nextButton.addEventListener("click", () => {
+        showScreen(3);
+        startAnalysis();
+    });
 
-      const response = await fetch(API_URL, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to analyze the file");
-      }
-
-      const data = await response.json();
-
-      uploadScreen.style.display = "none";
-      resultsScreen.style.display = "block";
-
-      const ctx = document.getElementById("results-chart").getContext("2d");
-      new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: ["Physical", "Emotional", "Mental", "Spiritual"],
-          datasets: [
-            {
-              label: "Engagement Scores",
-              data: [data.physical, data.emotional, data.mental, data.spiritual],
-              backgroundColor: ["#4CAF50", "#FFC107", "#2196F3", "#9C27B0"],
-            },
-          ],
-        },
-      });
-
-      analyzeBtn.textContent = "Analyze";
-      analyzeBtn.disabled = false;
-    } catch (error) {
-      console.error("Error:", error);
-      alert("An error occurred during analysis. Please try again.");
+    function startAnalysis() {
+        const progressInterval = setInterval(() => {
+            if (progress >= 100) {
+                clearInterval(progressInterval);
+                analysisProgress.style.width = "100%";
+                viewResultsButton.style.display = 'block';
+            } else {
+                progress += 10;
+                analysisProgress.style.width = progress + "%";
+            }
+        }, 500);
     }
-  });
+
+    viewResultsButton.addEventListener("click", () => {
+        showScreen(4);
+        updateCharts();
+    });
+
+    function updateCharts() {
+        const engagementChartContext = document.getElementById("engagementChart").getContext("2d");
+        const sentimentChartContext = document.getElementById("sentimentChart").getContext("2d");
+
+        new Chart(engagementChartContext, {
+            type: 'line',
+            data: {
+                labels: ['Segment 1', 'Segment 2', 'Segment 3', 'Segment 4'],
+                datasets: [{
+                    label: 'Engagement Score',
+                    data: [7, 8, 9, 6],
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    fill: true
+                }]
+            }
+        });
+
+        new Chart(sentimentChartContext, {
+            type: 'line',
+            data: {
+                labels: ['Segment 1', 'Segment 2', 'Segment 3', 'Segment 4'],
+                datasets: [{
+                    label: 'Sentiment Score',
+                    data: [0.5, 0.8, -0.4, 0.3],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true
+                }]
+            }
+        });
+    }
 });
