@@ -1,5 +1,3 @@
-# File: app.py
-
 from flask import Flask, request, jsonify
 import logging
 
@@ -8,13 +6,11 @@ app = Flask(__name__)
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-
 @app.route("/")
 def home():
     """Home route to confirm the API is running."""
     app.logger.info("Home route accessed")
     return "EngageSense API is running!"
-
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
@@ -42,13 +38,11 @@ def analyze():
 
     return jsonify(response)
 
-
 def perform_analysis(file):
     """
     Perform the analysis on the uploaded file.
     Currently returns simulated values.
     """
-    # TODO: Implement actual analysis logic based on the file's content
     app.logger.info("Simulating analysis")
     return {
         "physical": 85,
@@ -56,7 +50,6 @@ def perform_analysis(file):
         "mental": 65,
         "spiritual": 55,
     }
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
