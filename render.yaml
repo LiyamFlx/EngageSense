@@ -1,0 +1,15 @@
+services:
+- type: web
+  name: EngageSense
+  runtime: python
+  repo: https://github.com/LiyamFlx/EngageSense
+  plan: free
+  envVars:
+  - key: SECRET_KEY
+    sync: false
+  - key: FLASK_ENV
+    sync: false
+  region: oregon
+  buildCommand: pip install -r requirements.txt
+  startCommand: gunicorn app:app
+version: "1"
