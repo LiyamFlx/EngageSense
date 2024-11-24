@@ -1,41 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RhythmSense EngageSense</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EngageSense</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h2>RhythmSense EngageSense</h2>
-        <button class="button" onclick="showScreen(2)">Start Analysis</button>
+  <div class="container">
+    <h1>EngageSense: Real-Time Audio Analysis</h1>
+    <form id="uploadForm">
+      <label for="audioFile">Upload an Audio File:</label>
+      <input type="file" id="audioFile" name="file" accept="audio/*" required>
+      <button type="submit">Analyze</button>
+    </form>
+    <div id="result"></div>
+  </div>
 
-        <div id="screen2" style="display:none;">
-            <h2>Upload Audio File</h2>
-            <input type="file" id="fileInput" accept=".mp3,.mp4,.wav">
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            <button class="button" onclick="showScreen(1)">Back</button>
-            <button class="button" id="nextButton" style="display:none;">Calculate Engagement</button>
-        </div>
-
-        <div id="screen3" style="display:none;">
-            <h2>Real-Time Analysis</h2>
-            <div class="progress-container">
-                <div class="progress-bar" id="analysisProgress"></div>
-            </div>
-            <button class="button" id="viewResultsButton" style="display:none;">View Results</button>
-        </div>
-
-        <div id="screen4" style="display:none;">
-            <h2>Analysis Results</h2>
-            <canvas id="engagementChart"></canvas>
-            <canvas id="sentimentChart"></canvas>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
