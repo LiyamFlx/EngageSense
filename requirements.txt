@@ -5,3 +5,5 @@ librosa
 scikit-learn
 matplotlib
 SpeechRecognition
+flask
+flask-cors
